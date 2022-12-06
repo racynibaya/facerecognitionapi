@@ -2,39 +2,37 @@ import express from 'express';
 import bcrypt from 'bcrypt-nodejs';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import knex from 'knex';
+import pg from 'pg';
+
+const db = knex({
+  client: 'pg',
+  version: 15.1,
+  connection: {
+    host: '127.0.0.1',
+    user: 'postgres',
+    port: 5432,
+    password: 'test',
+    database: 'smart-brain',
+  },
+});
 
 const app = express();
 
-const database = {
-  users: [
-    {
-      id: 123,
-      email: 'john@email.com',
-      name: 'John',
-      password: 'cookies',
-      entries: 0,
-      joined: new Date(),
-    },
-
-    {
-      id: 1234,
-      email: 'sally@email.com',
-      name: 'Sally',
-      password: 'bananas',
-      entries: 0,
-      joined: new Date(),
-    },
-  ],
-};
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// Express has built in parser
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 app.get('/', (req, res) => {
-  res.send(database.users);
+  db.select('*')
+    .from('users')
+    .returning('*')
+    .then(response => res.json(response))
+    .catch(err => res.status(404).json(err));
 });
 
 app.post('/signin', (req, res) => {
@@ -61,39 +59,19 @@ app.post('/signin', (req, res) => {
 app.post('/register', (req, res) => {
   const { email, name, password } = req.body;
 
-  // bcrypt.hash(password, null, null, function (err, hash) {
-  //   // Store hash in your password DB.
-  //   console.log(hash);
-  // });
-
-  // Load hash from your password DB.
-  bcrypt.compare(
-    'eagle',
-    '$2a$10$JpRozF.9HgluGKMG5qtThuRzbh1ARR1PF.M.2C2Z68MsqA.6MAS5G',
-    function (err, res) {
-      // res == true
-      console.log(res);
-    }
-  );
-  bcrypt.compare(
-    'veggies',
-    '$2a$10$JpRozF.9HgluGKMG5qtThuRzbh1ARR1PF.M.2C2Z68MsqA.6MAS5G',
-    function (err, res) {
-      // res = false
-      console.log(res);
-    }
-  );
-
-  database.users.push({
-    id: 125,
-    email: email,
-    name: name,
-    password: password,
-    entries: 0,
-    joined: new Date(),
+  bcrypt.hash(password, null, null, function (err, hash) {
+    db.from('login').insert({ hash: hash });
   });
 
-  res.json(database.users[database.users.length - 1]);
+  db.from('users')
+    .returning('*')
+    .insert({
+      email,
+      name,
+      joined: new Date(),
+    })
+    .then(response => res.json(response[0]))
+    .catch(err => res.status(404).json(err));
 });
 
 app.get('/profile/:id', (req, res) => {
