@@ -5,6 +5,12 @@ import cors from 'cors';
 import knex from 'knex';
 import pg from 'pg';
 
+import { handleImage } from './controllers/imageHandler.js';
+import { handleRegister } from './controllers/register.js';
+import { handleSignin } from './controllers/handleSignin.js';
+import { getUser } from './controllers/getUser.js';
+import { getAllUser } from './controllers/getAllUser.js';
+
 const db = knex({
   client: 'pg',
   version: 15.1,
@@ -27,92 +33,22 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get('/', (req, res) => {
-  db.select('*')
-    .from('users')
-    .then(response => res.json(response))
-    .catch(err => res.status(404).json(err));
+app.get('/', (req, res, db) => {
+  getAllUser(req, res, db);
 });
 
-app.post('/signin', (req, res) => {
-  const { email, password } = req.body;
-
-  db.select('email', 'hash')
-    .from('login')
-    .where('email', email)
-    .then(user => {
-      const { hash, email } = user[0];
-      const isValid = bcrypt.compareSync(password, hash);
-
-      if (isValid) {
-        db.select('*')
-          .from('users')
-          .where('email', email)
-          .then(user => res.json(user[0]))
-          .catch(err => res.status(404).json(err.message));
-      } else {
-        res.json('Email or password unmatched');
-      }
-    })
-    .catch(err => res.status(404).json('User not found!'));
-});
+app.post('/signin', (req, res) => handleSignin(req, res, db, bcrypt));
 
 app.post('/register', (req, res) => {
-  const { email, name, password } = req.body;
-
-  const hash = bcrypt.hashSync(password);
-
-  db.transaction(trx => {
-    trx
-      .insert({
-        email,
-        hash,
-      })
-      .into('login')
-      .returning('email')
-      .then(loginEmail => {
-        return trx
-          .insert({
-            email: loginEmail[0].email,
-            name,
-            joined: new Date(),
-          })
-          .into('users')
-          .returning('*')
-          .then(users => {
-            res.json(users[0]);
-          });
-      })
-      .then(trx.commit)
-      .catch(trx.rollback);
-  }).catch(err => res.status(404).json('Unable to register'));
+  handleRegister(req, res, db, bcrypt);
 });
 
 app.get('/profile/:id', (req, res) => {
-  const { id } = req.params;
-
-  db.select('*')
-    .from('users')
-    .where({ id })
-    .then(response => {
-      if (response.length) res.json(response[0]);
-      else throw new Error('Not found');
-    })
-    .catch(err => res.status(404).json(err.message));
+  getUser(req, res, db);
 });
 
-app.put('/image', (req, res) => {
-  const { id } = req.body;
-
-  db.from('users')
-    .where({ id: id })
-    .increment('entries', 1)
-    .returning('entries')
-    .then(response => {
-      const { entries } = response[0];
-      res.json(entries);
-    })
-    .catch(err => res.status(404).json('Unable to get entries'));
+app.put('/image', (req, res, db) => {
+  handleImage(req, res, db);
 });
 
 app.listen(8000, () => {
