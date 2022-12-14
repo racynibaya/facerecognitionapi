@@ -5,7 +5,7 @@ import cors from 'cors';
 import knex from 'knex';
 import pg from 'pg';
 
-import { handleImage, imageUrl } from './controllers/image.js';
+import { handleImage, handleApiCall } from './controllers/image.js';
 import { getUser } from './controllers/profile.js';
 import { handleRegister } from './controllers/register.js';
 import { handleSignin } from './controllers/signin.js';
@@ -51,7 +51,7 @@ app.put('/image', (req, res) => {
 });
 
 app.post('/imageUrl', (req, res) => {
-  imageUrl(req, res);
+  handleApiCall(req, res);
 });
 
 app.listen(8000, () => {
