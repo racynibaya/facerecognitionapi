@@ -5,11 +5,11 @@ import cors from 'cors';
 import knex from 'knex';
 import pg from 'pg';
 
-import { handleImage } from './controllers/imageHandler.js';
+import { handleImage, imageUrl } from './controllers/image.js';
+import { getUser } from './controllers/profile.js';
 import { handleRegister } from './controllers/register.js';
-import { handleSignin } from './controllers/handleSignin.js';
-import { getUser } from './controllers/getUser.js';
-import { getAllUser } from './controllers/getAllUser.js';
+import { handleSignin } from './controllers/signin.js';
+import { users } from './controllers/users.js';
 
 const db = knex({
   client: 'pg',
@@ -33,11 +33,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get('/', (req, res, db) => {
-  getAllUser(req, res, db);
-});
+app.get('/', users(db));
 
-app.post('/signin', (req, res) => handleSignin(req, res, db, bcrypt));
+// handleSignin returns a function
+app.post('/signin', handleSignin(db, bcrypt));
 
 app.post('/register', (req, res) => {
   handleRegister(req, res, db, bcrypt);
@@ -47,8 +46,12 @@ app.get('/profile/:id', (req, res) => {
   getUser(req, res, db);
 });
 
-app.put('/image', (req, res, db) => {
+app.put('/image', (req, res) => {
   handleImage(req, res, db);
+});
+
+app.post('/imageUrl', (req, res) => {
+  imageUrl(req, res);
 });
 
 app.listen(8000, () => {

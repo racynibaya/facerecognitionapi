@@ -1,6 +1,9 @@
-export const handleSignin = (req, res, db, bcrypt) => {
+export const handleSignin = (db, bcrypt) => (req, res) => {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json('Invalid submission');
+  }
   db.select('email', 'hash')
     .from('login')
     .where('email', email)
@@ -15,8 +18,8 @@ export const handleSignin = (req, res, db, bcrypt) => {
           .then(user => res.json(user[0]))
           .catch(err => res.status(404).json(err.message));
       } else {
-        res.json('Email or password unmatched');
+        throw new Error('User not found');
       }
     })
-    .catch(err => res.status(404).json('User not found!'));
+    .catch(err => res.status(404).json(err.message));
 };
