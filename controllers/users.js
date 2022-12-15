@@ -5,5 +5,3 @@ export const users = db => (req, res) => {
     .then(response => res.json(response))
     .catch(err => res.status(404).json(err));
 };
-
-console.log(users());
