@@ -38,22 +38,16 @@ app.get('/', users(db));
 // handleSignin returns a function
 app.post('/signin', handleSignin(db, bcrypt));
 
-app.post('/register', (req, res) => {
-  handleRegister(req, res, db, bcrypt);
-});
+app.post('/register', handleRegister(db, bcrypt));
 
-app.get('/profile/:id', (req, res) => {
-  getUser(req, res, db);
-});
+app.get('/profile/:id', getUser(db));
 
-app.put('/image', (req, res) => {
-  handleImage(req, res, db);
-});
+app.put('/image', handleImage(db));
 
-app.post('/imageUrl', (req, res) => {
-  handleApiCall(req, res);
-});
+app.post('/imageUrl', (req, res) => handleApiCall(req, res));
 
 app.listen(8000, () => {
   console.log('App is running on port 8000');
 });
+
+console.log(process.env);

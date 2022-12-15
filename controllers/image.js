@@ -7,10 +7,6 @@ metadata.set('authorization', 'Key ddedab0c5dd94e1589aebfe97f4fadff');
 
 import Clarifai from 'clarifai';
 
-// const app = new Clarifai.App({
-//   apiKey: 'ddedab0c5dd94e1589aebfe97f4fadff',
-// });
-
 console.log(Clarifai);
 export const handleApiCall = (req, res) => {
   const { input } = req.body;
@@ -52,7 +48,7 @@ export const handleApiCall = (req, res) => {
   //   .catch(err => res.status(404).json('Invalid Url'));
 };
 
-export const handleImage = (req, res, db) => {
+export const handleImage = db => (req, res) => {
   const { id } = req.body;
 
   db.from('users')
