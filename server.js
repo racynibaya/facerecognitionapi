@@ -10,12 +10,11 @@ import { getUser } from './controllers/profile.js';
 import { handleRegister } from './controllers/register.js';
 import { handleSignin } from './controllers/signin.js';
 import { users } from './controllers/users.js';
-
 const db = knex({
   client: 'pg',
   version: 15.1,
   connection: {
-    hostname: process.env.DATABASE_URL,
+    hostname: process.env.INTERNAL_DATABASE_URL,
     user: 'smart_brain_db_gz76_user',
     port: 5432,
     password: process.env.DB_PASSWORD,
@@ -49,5 +48,5 @@ app.post('/imageUrl', (req, res) => handleApiCall(req, res));
 
 const PORT = process.env.PORT;
 app.listen(PORT || 8000, () => {
-  console.log(`App is running on port ${PORT}`);
+  console.log(`App is running on port ${PORT || 8000}`);
 });
