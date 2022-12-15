@@ -16,9 +16,9 @@ const db = knex({
   version: 15.1,
   connection: {
     hostname: process.env.DATABASE_URL,
-    user: 'postgres',
+    user: 'smart_brain_db_gz76_user',
     port: 5432,
-    password: 'smart_brain_db_gz76_user',
+    password: process.env.DB_PASSWORD,
     database: 'smart_brain_db_gz76',
   },
 });
