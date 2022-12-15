@@ -5,9 +5,6 @@ const stub = ClarifaiStub.grpc();
 const metadata = new grpc.Metadata();
 metadata.set('authorization', `Key ${process.env.API_KEY}`);
 
-import Clarifai from 'clarifai';
-
-console.log(Clarifai);
 export const handleApiCall = (req, res) => {
   const { input } = req.body;
 

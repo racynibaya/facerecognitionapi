@@ -33,7 +33,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get('/', users(db));
+// app.get('/', (users(db)));
+app.get('/', (req, res) => res.json('It is working'));
 
 // handleSignin returns a function
 app.post('/signin', handleSignin(db, bcrypt));

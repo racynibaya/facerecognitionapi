@@ -1,4 +1,5 @@
 export const users = db => (req, res) => {
+  res.json('It is working');
   db.select('*')
     .from('users')
     .orderBy('id', 'desc')
