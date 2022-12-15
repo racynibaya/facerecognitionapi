@@ -15,7 +15,7 @@ const db = knex({
   client: 'pg',
   version: 15.1,
   connection: {
-    hostname: process.env.INTERNAL_DATABASE_URL,
+    host: process.env.INTERNAL_DATABASE_URL,
     user: 'smart_brain_db_gz76_user',
     port: 5432,
     password: `${process.env.DB_PASSWORD}`,
