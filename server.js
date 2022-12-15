@@ -15,11 +15,11 @@ const db = knex({
   client: 'pg',
   version: 15.1,
   connection: {
-    host: '127.0.0.1',
+    hostname: process.env.DATABASE_URL,
     user: 'postgres',
     port: 5432,
-    password: 'test',
-    database: 'smart-brain',
+    password: 'smart_brain_db_gz76_user',
+    database: 'smart_brain_db_gz76',
   },
 });
 
@@ -33,8 +33,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-// app.get('/', (users(db)));
-app.get('/', (req, res) => res.json('It is working'));
+app.get('/', users(db));
+// app.get('/', (req, res) => res.json('It is working'));
 
 // handleSignin returns a function
 app.post('/signin', handleSignin(db, bcrypt));
