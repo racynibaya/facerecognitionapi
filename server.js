@@ -11,22 +11,16 @@ import { handleRegister } from './controllers/register.js';
 import { handleSignin } from './controllers/signin.js';
 import { users } from './controllers/users.js';
 
-// const db = knex({
-//   client: 'pg',
-//   version: 15.1,
-//   connection: {
-//     host: 'postgres://smart_brain_db_gz76_user:E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk@dpg-cedng3cgqg43c91lqga0-a/smart_brain_db_gz76',
-//     user: 'smart_brain_db_gz76_user',
-//     port: 5432,
-//     password: 'E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk',
-//     database: 'smart_brain_db_gz76',
-//   },
-// });
-
-const db = require('knex')({
+const db = knex({
   client: 'pg',
-  connection: process.env.INTERNAL_DATABASE_URL,
-  searchPath: ['knex', 'public'],
+  version: 15.1,
+  connection: {
+    host: 'dpg-cedng3cgqg43c91lqga0-a',
+    user: 'smart_brain_db_gz76_user',
+    port: 5432,
+    password: process.env.DB_PASSWORD,
+    database: 'smart_brain_db_gz76',
+  },
 });
 
 const app = express();
