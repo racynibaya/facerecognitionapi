@@ -15,10 +15,10 @@ const db = knex({
   client: 'pg',
   version: 15.1,
   connection: {
-    host: 'https://smart-brain-api-bqye.onrender.com/',
+    host: 'postgres://smart_brain_db_gz76_user:E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk@dpg-cedng3cgqg43c91lqga0-a/smart_brain_db_gz76',
     user: 'smart_brain_db_gz76_user',
     port: 5432,
-    password: '',
+    password: 'E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk',
     database: 'smart_brain_db_gz76',
   },
 });
