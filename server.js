@@ -15,7 +15,7 @@ const db = knex({
   client: 'pg',
   version: 15.1,
   connection: {
-    host: 'postgres://smart_brain_db_gz76_user:E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk@dpg-cedng3cgqg43c91lqga0-a.oregon-postgres.render.com/smart_brain_db_gz76',
+    host: 'https://smart-brain-api-bqye.onrender.com/',
     user: 'smart_brain_db_gz76_user',
     port: 5432,
     password: '',
@@ -33,8 +33,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.get('/', users(db));
-// app.get('/', (req, res) => res.json('It is working'));
+// app.get('/', users(db));
+app.get('/', (req, res) => res.json('It is working'));
 
 // handleSignin returns a function
 app.post('/signin', handleSignin(db, bcrypt));
