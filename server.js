@@ -33,9 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-// app.get('/', users(db));
 app.get('/', (req, res) => res.json('It is working'));
 
+app.get('/a', users(db));
 // handleSignin returns a function
 app.post('/signin', handleSignin(db, bcrypt));
 
