@@ -1,6 +1,6 @@
 export const handleRegister = (db, bcrypt) => (req, res) => {
   const { email, name, password } = req.body;
-
+  console.log(email, name, password);
   if (!email || !name || !password) {
     return res.json('incorrect submission');
   }
@@ -16,6 +16,7 @@ export const handleRegister = (db, bcrypt) => (req, res) => {
       .into('login')
       .returning('email')
       .then(loginEmail => {
+        console.log(loginEmail);
         return trx
           .insert({
             email: loginEmail[0].email,
