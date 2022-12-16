@@ -18,7 +18,7 @@ const db = knex({
     host: 'dpg-cedng3cgqg43c91lqga0-a',
     user: 'smart_brain_db_gz76_user',
     port: 5432,
-    password: `${process.env.DB_PASSWORD}`,
+    password: 'E2j10E4UCgpN5yX7pZMYK4uUaXjK75uk',
     database: 'smart_brain_db_gz76',
   },
 });
