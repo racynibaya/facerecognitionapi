@@ -1,4 +1,4 @@
-export const getUser = db => (req, res) => {
+export const getUser = (req, res, db) => {
   const { id } = req.params;
 
   db.select('*')

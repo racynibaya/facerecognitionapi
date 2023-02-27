@@ -5,6 +5,16 @@ const stub = ClarifaiStub.grpc();
 const metadata = new grpc.Metadata();
 metadata.set('authorization', `Key ${process.env.API_KEY}`);
 
+<<<<<<< HEAD
+=======
+import Clarifai from 'clarifai';
+
+// const app = new Clarifai.App({
+//   apiKey: 'ddedab0c5dd94e1589aebfe97f4fadff',
+// });
+
+console.log(Clarifai);
+>>>>>>> parent of 6c4e2cd (code refactoring)
 export const handleApiCall = (req, res) => {
   const { input } = req.body;
 
@@ -45,7 +55,7 @@ export const handleApiCall = (req, res) => {
   //   .catch(err => res.status(404).json('Invalid Url'));
 };
 
-export const handleImage = db => (req, res) => {
+export const handleImage = (req, res, db) => {
   const { id } = req.body;
 
   db.from('users')
