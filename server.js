@@ -1,9 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcrypt-nodejs';
-import bodyParser from 'body-parser';
 import cors from 'cors';
 import knex from 'knex';
-import pg from 'pg';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 import { handleImage, handleApiCall } from './controllers/image.js';
 import { getUser } from './controllers/profile.js';

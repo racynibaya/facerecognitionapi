@@ -4,6 +4,7 @@ export const handleSignin = (db, bcrypt) => (req, res) => {
   if (!email || !password) {
     return res.status(400).json('Invalid submission');
   }
+
   db.select('email', 'hash')
     .from('login')
     .where('email', email)
